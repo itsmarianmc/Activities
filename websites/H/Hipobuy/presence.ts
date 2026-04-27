@@ -171,8 +171,10 @@ async function getSmallImageKey(defaultKey: string, defaultTextKey: string, stri
 
 presence.on('UpdateData', async () => {
   const { pathname, search, href } = document.location
-  const showTimestamps = await presence.getSetting<boolean>('timestamps').catch(() => true)
-  const disableButtons = await presence.getSetting<boolean>('disableButtons').catch(() => false)
+  const [showTimestamps, disableButtons] = await Promise.all([
+    presence.getSetting<boolean>('timestamps').catch(() => true),
+    presence.getSetting<boolean>('disableButtons').catch(() => false),
+  ])
 
   const strings = await presence.getStrings({
     browsing: 'general.browsing',
